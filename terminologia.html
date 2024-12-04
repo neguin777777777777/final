@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Cores */
+        :root {
+            --azul-cientifico: #2C3E50;
+            --verde-quimico: #1ABC9C;
+            --cinza-claro: #ECF0F1;
+            --branco-neutro: #FFFFFF;
+            --laranja-sutil: #E67E22;
+            --cinza-escuro: #34495E;
+        }
+        body.dark-mode {
+            --cinza-claro: #34495E;
+            --cinza-escuro: #1E272E;
+            --azul-cientifico: #AED6F1;
+            --verde-quimico: #16A085;
+            --branco-neutro: #F8F9F9;
+}
+
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--cinza-claro);
+            color: var(--cinza-escuro);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            background-color: var(--azul-cientifico);
+            color: var(--branco-neutro);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        .logo a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .logo i {
+            font-size: 30px;
+            margin-right: 10px;
+        }
+
+        nav a {
+            color: var(--branco-neutro);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        nav a:hover {
+            color: var(--verde-quimico);
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+        }
+        .search-box {
+            width: 200px;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .mode-icon {
+            cursor: pointer;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--branco-neutro);
+            margin-left: 15px;
+        }
+         /* Modo escuro */
+         .dark-mode {
+            background-color: #333;
+            color: white;
+        }
+        .dark-mode header {
+            background-color: black;
+        }
+        
+
+        ul {
+    list-style-type: none; /* Remove os marcadores */
+    padding: 0;
+    margin: 20px 0;
+}
+
+ul li {
+    background-color: var(--cinza-claro); /* Cor de fundo para destaque */
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+ul li:hover {
+    background-color: var(--verde-quimico); /* Altera a cor ao passar o mouse */
+    transform: scale(1.05); /* Dá um leve zoom ao passar o mouse */
+}
+
+ul li b {
+    color: var(--azul-cientifico); /* Cor do texto em negrito */
+    font-weight: bold;
+    font-size: 1.1em; /* Aumenta levemente o tamanho da fonte */
+}
+
+ul li span {
+    display: block;
+    margin-top: 5px;
+    color: var(--cinza-escuro); /* Cor do texto secundário */
+    font-size: 0.95em;
+}
+.text-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.6;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            background-color: #f4f4f9;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+
+        .dark-mode .text-container {
+            background-color: #444;
+            color: #ddd;
+        }
+
+    </style>
+</head>
+<body class="light-mode">
+    
+    <header>
+        <div class="logo">
+            <a href="index.html"><i class="fas fa-flask"></i> Elementos Químicos</a>
+        </div>
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="sobre os elementos.html">Sobre</a>
+            <a href="terminologia.html">Terminologias</a>
+            <a href="elementos.html">Elementos Químicos</a>
+        </nav>
+        <div class="search-container">
+            ㅤㅤㅤㅤㅤㅤㅤㅤㅤ
+            <button class="mode-icon" onclick="toggleMode()">🌙</button>
+        </div>
+    </header>
+    <div class="text-container">
+    <center><h2>Lista de Terminologias Científicas</h2></center>
+    <ul>
+        <li><b>1-hidroxi-2-metil-benzeno:</b> o-cresol</li>
+        <li><b>1-hidroxi-3-metil-benzeno:</b> m-cresol</li>
+        <li><b>1-hidroxi-4-metil-benzeno:</b> p-cresol</li>
+        <li><b>Absorbância:</b> Medida da capacidade de absorção de luz</li>
+        <li><b>Ácidos:</b> Substâncias que liberam ou produzem íons H+ quando dissolvidas em água. Fórmulas dos ácidos contêm átomos de hidrogênio e um grupo aniônico.</li>
+        <li><b>Alcanos:</b> Hidrocarbonetos com ligações simples, formando cadeias carbônicas saturadas.</li>
+        <li><b>Aldeídos:</b> Compostos orgânicos com o grupo carbonila na extremidade da cadeia. A numeração começa da extremidade com o grupo funcional.</li>
+        <li><b>Bicarbonatos:</b> Íons relacionados à interação do gás carbônico com a água.</li>
+        <li><b>Calcinação:</b> Processo que transforma o hidrato em uma mistura cristalina de formas alotrópicas de Al₂O₃.</li>
+        <li><b>Catalisador:</b> Substância que diminui a energia de ativação e acelera uma reação química.</li>
+        <li><b>Cetona:</b> Composto orgânico com grupo carbonila ligado a dois grupos orgânicos. Exemplo: acetona (propanona).</li>
+        <li><b>Corrosão:</b> Processo pelo qual metais são transformados em óxidos ou outros compostos, levando à deterioração gradual.</li>
+        <li><b>Densidade:</b> Massa por unidade de volume. Depende da temperatura e do estado físico da substância.</li>
+        <li><b>Solubilidade:</b> Quantidade máxima de um soluto que pode ser dissolvido em um solvente, variando com a temperatura.</li>
+    </ul>
+    </div>
+    <script>
+        // Função para alternar entre os modos
+        function toggleMode() {
+            const body = document.body;
+            const button = document.querySelector('.mode-icon');
+    
+            // Alterna entre os modos
+            if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                button.textContent = '☀️';
+                localStorage.setItem('theme', 'dark-mode'); // Salva o estado no Local Storage
+            } else {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                button.textContent = '🌙';
+                localStorage.setItem('theme', 'light-mode'); // Salva o estado no Local Storage
+            }
+        }
+    
+        // Função para carregar o modo salvo no Local Storage
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme'); // Recupera o estado salvo
+            const body = document.body;
+            const button = document.querySelector('.mode-icon');
+    
+            if (savedTheme === 'dark-mode') {
+                body.classList.add('dark-mode');
+                body.classList.remove('light-mode');
+                button.textContent = '☀️';
+            } else {
+                body.classList.add('light-mode');
+                body.classList.remove('dark-mode');
+                button.textContent = '🌙';
+            }
+        }
+    
+        // Carrega o tema ao carregar a página
+        document.addEventListener('DOMContentLoaded', loadTheme);
+    </script>
+    
+</body>
+</html>

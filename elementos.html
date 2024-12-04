@@ -1,0 +1,2000 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Tabela Periódica</title>
+    <style>
+        .table-container {
+            display: grid;
+            grid-template-columns: repeat(18, 50px);
+            grid-template-rows: repeat(10, 50px);
+            gap: 10px;
+            justify-content: center;
+            padding: 20px;
+            grid-template-areas:
+                "H  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  He"
+                "Li Be .  .  .  .  .  .  .  .  .  .  .  B  C  N  O  F  Ne"
+                "Na Mg .  .  .  .  .  .  .  .  .  .  Al Si P  S  Cl Ar"
+                "K  Ca Sc Ti V  Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr"
+                "Rb Sr Y  Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I  Xe"
+                "Cs Ba La Hf Ta W  Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn"
+                "Fr Ra Ac Rf Db Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og"
+                ".  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  .  ."
+                "La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu"
+                "Ac Th Pa U  Np Pu Am Cm Bk Cf Es Fm Md No Lr";
+        }
+
+
+
+        .element {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            background-color: #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.3s, width 0.3s, height 0.3s;
+        }
+
+        .element span {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .element-info {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            color: #fff;
+            font-size: 14px;
+            padding: 5px;
+        }
+
+        .element:hover .element-info {
+            display: block;
+        }
+
+        .element:hover {
+            width: 80px;
+            height: 80px;
+            z-index: 2;
+        }
+
+        .element-info .atomic-number {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+        }
+
+        .element-info .atomic-weight {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+        }
+
+        .element-info .element-name {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+        }
+
+        /* Classes Químicas */
+        .metal-alkaline {
+            background-color: #ff6666;
+        }
+
+        .metal-alkaline-earth {
+            background-color: #ffaf60;
+        }
+
+        .metalloids {
+            background-color: #99ff99;
+        }
+
+        .nonmetals {
+            background-color: #99ccff;
+        }
+
+        .halogens {
+            background-color: #ff99cc;
+        }
+
+        .noble-gases {
+            background-color: #ffccff;
+        }
+
+        .lanthanides {
+            background-color: #ccccff;
+        }
+
+        .actinides {
+            background-color: #ffcc99;
+        }
+
+        .transition-metals {
+            background-color: #f5b1b1;
+        }
+
+        .blanco {
+            background-color: #fff;
+        }
+
+        .container {
+            display: flex;
+            /* Ativa o Flexbox para organizar os itens lado a lado */
+            justify-content: space-between;
+            /* Espaçamento entre a tabela e a legenda */
+            align-items: flex-start;
+            /* Alinha ao topo dos elementos */
+            padding: 20px;
+            /* Adiciona algum espaçamento ao redor */
+        }
+
+        .tabela {
+            display: grid;
+            /* Usa o grid para organizar os elementos da tabela periódica */
+            grid-template-columns: repeat(18, 1fr);
+            /* Exemplo de 18 colunas, ajuste conforme necessário */
+            grid-gap: 10px;
+            /* Espaçamento entre os elementos da tabela */
+            width: 75%;
+            /* A tabela ocupa 75% da largura */
+        }
+
+        .legenda {
+            width: 20%;
+            /* A legenda ocupa 20% da largura */
+            margin-left: 20px;
+            /* Espaçamento entre a tabela e a legenda */
+        }
+
+        .legenda ul {
+            list-style: none;
+            /* Remove as bolinhas padrão das listas */
+            padding: 0;
+        }
+
+        .legenda li {
+            margin-bottom: 10px;
+            /* Espaçamento entre os itens da legenda */
+        }
+
+        .legenda li span {
+            display: inline-block;
+            width: 20px;
+            /* Tamanho do quadrado colorido da legenda */
+            height: 20px;
+            margin-right: 10px;
+            /* Espaçamento entre o quadrado e o texto */
+            background-color: grey;
+            /* Exemplo de cor, modifique conforme necessário */
+            border-radius: 5px;
+            /* Faz o quadrado virar um círculo */
+        }
+
+
+        .metais-alcalinos {
+            background-color: red;
+            /* Cor para Metais Alcalinos */
+        }
+
+        .metais-alcalino-terrosos {
+            background-color: orange;
+            /* Cor para Metais Alcalino-Terrosos */
+        }
+
+        .metaloides {
+            background-color: green;
+            /* Cor para Metaloides */
+        }
+
+        .nao-metais {
+            background-color: blue;
+            /* Cor para Não Metais */
+        }
+
+        .elemento {
+            text-align: center;
+            /* Centraliza o texto dos elementos */
+            border: 1px solid #ccc;
+            /* Adiciona uma borda aos elementos */
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        #show-all {
+            margin-top: 10px;
+            /* Espaço acima do botão */
+            padding: 8px 16px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #show-all:hover {
+            background-color: #0056b3;
+        }
+
+        .tabela {
+            width: 75%;
+            /* Define 75% da largura para a tabela */
+        }
+
+        .legenda {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            user-select: none; 
+        }
+
+        /* Animação de expansão e tremor para a legenda */
+
+        .legend li:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+        }
+
+        /* Animação de tremor suave e expansão para os elementos ao passar o mouse na legenda */
+        .element.highlight {
+            transition: transform 0.3s ease;
+            transform: scale(1.1);
+            /* Expansão do elemento */
+            animation: smoothShake 0.6s ease infinite;
+            /* Tremor suave e infinito */
+        }
+
+        /* Animação de tremor suave para todas as direções */
+        @keyframes smoothShake {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1.1);
+            }
+
+            /* Certifica-se de que a escala de 1.2 seja mantida */
+            10% {
+                transform: translate(-2px, -2px) scale(1.1);
+            }
+
+            20% {
+                transform: translate(3px, 1px) scale(1.1);
+            }
+
+            30% {
+                transform: translate(-1px, 3px) scale(1.1);
+            }
+
+            40% {
+                transform: translate(1px, -1px) scale(1.1);
+            }
+
+            50% {
+                transform: translate(-3px, 2px) scale(1.1);
+            }
+
+            60% {
+                transform: translate(2px, -3px) scale(1.1);
+            }
+
+            70% {
+                transform: translate(-1px, 1px) scale(1.1);
+            }
+
+            80% {
+                transform: translate(1px, -2px) scale(1.1);
+            }
+
+            90% {
+                transform: translate(-2px, 3px) scale(1.1);
+            }
+        }
+
+        /* Mantém o estilo original dos elementos sem interferir nas outras animações */
+        .element {
+        }
+
+        .nada {
+            background-color: white;
+        }
+
+
+        .metal-alkaline-legend {
+            background-color: #ff6666;
+        }
+
+        .metal-alkaline-earth-legend {
+            background-color: #a67647;
+        }
+
+        .metalloids-legend {
+            background-color: #99ff99;
+        }
+
+        .nonmetals-legend {
+            background-color: #99ccff;
+        }
+
+        .halogens-legend {
+            background-color: #ff99cc;
+        }
+
+        .noble-gases-legend {
+            background-color: #ffccff;
+        }
+
+        .lanthanides-legend {
+            background-color: #ccccff;
+        }
+
+        .actinides-legend {
+            background-color: #ffcc99;
+        }
+
+        .transition-metals-legend {
+            background-color: #f5b1b1;
+        }
+        
+         /* Cores */
+         :root {
+            --azul-cientifico: #2C3E50;
+            --verde-quimico: #1ABC9C;
+            --cinza-claro: #ECF0F1;
+            --branco-neutro: #FFFFFF;
+            --laranja-sutil: #E67E22;
+            --cinza-escuro: #34495E;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--cinza-claro);
+            color: var(--cinza-escuro);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+        background-color: var(--azul-cientifico);
+        color: var(--branco-neutro);
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.logo a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.logo i {
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+nav a {
+    color: var(--branco-neutro);
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+}
+
+nav a:hover {
+    color: var(--verde-quimico);
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.search-box {
+    width: 200px;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+}
+
+.mode-icon {
+    cursor: pointer;
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: var(--branco-neutro);
+    margin-left: 15px;
+}
+
+/* Modo Escuro */
+.dark-mode header {
+    background-color: black;
+}
+
+.dark-mode nav a {
+    color: var(--cinza-claro);
+}
+
+.dark-mode .mode-icon {
+    color: var(--cinza-claro);
+}
+
+
+        .dark-mode {
+            background-color: #333;
+            color: white;
+        }
+        .dark-mode header {
+            background-color: black;
+        }
+
+        /* Responsividade */
+        @media screen and (max-width: 768px) {
+            .table-container {
+                grid-template-columns: repeat(9, 50px);
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .table-container {
+                grid-template-columns: repeat(6, 50px);
+            }
+        }
+
+        .element.blanco {
+            background-color: rgba(255, 255, 255, 0);
+            /* Totalmente transparente */
+            opacity: 0.0;
+            /* Deixa o conteúdo meio transparente (0% de opacidade) */
+        }
+
+        .invisivel {
+            opacity: 0.0;
+        }
+
+         /* Estilo do modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Sombra */
+}
+
+.modal-content {
+  background-color: var(--background-modal);
+  color: var(--text-color-modal);
+  margin: auto;
+  padding: 20px;
+  border: 1px solid var(--border-color-modal);
+  width: 50%;
+  border-radius: 10px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.close {
+  color: var(--close-button-color);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: var(--close-hover-color);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Variáveis para Modo Claro */
+body.light-mode {
+  --background-modal: #ffffff;
+  --text-color-modal: #000000;
+  --border-color-modal: #cccccc;
+  --close-button-color: #aaa;
+  --close-hover-color: #000;
+}
+
+/* Variáveis para Modo Escuro */
+body.dark-mode {
+  --background-modal: #333333;
+  --text-color-modal: #ffffff;
+  --border-color-modal: #555555;
+  --close-button-color: #fff;
+  --close-hover-color: #ff5555;
+}
+/* Estilos gerais para a seção histórica */
+.historical-section {
+    padding: 20px;
+    background-color: var(--background-color); /* Cor de fundo conforme o modo */
+    color: var(--text-color); /* Cor do texto conforme o modo */
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: justify;
+    line-height: 1.6;
+}
+
+/* Estilo do título */
+.historical-section h1 {
+    color: var(--heading-color); /* Cor do título conforme o modo */
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Variáveis para Modo Claro */
+body.light-mode {
+    --background-color: #f4f4f4; /* Fundo claro */
+    --text-color: #333; /* Texto escuro */
+    --heading-color: #2c3e50; /* Título em azul escuro */
+}
+
+/* Variáveis para Modo Escuro */
+body.dark-mode {
+    --background-color: #333; /* Fundo escuro */
+    --text-color: #f4f4f4; /* Texto claro */
+    --heading-color: #f1f1f1; /* Título em branco */
+}
+
+
+
+    </style>
+</head>
+
+<div id="elementModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 id="element-name"></h2>
+      <p>Número Atômico: <span id="atomic-number"></span></p>
+      <p>Peso Atômico: <span id="atomic-weight"></span></p>
+      <p id="element-description"></p> <!-- Área para descrição -->
+    </div>
+  </div>
+
+<body class="light-mode">
+    <header>
+        <div class="logo">
+            <a href="index.html"><i class="fas fa-flask"></i>Elementos Químicos</a>
+        </div>
+        <nav>
+            <a href="index.html">ㅤㅤㅤㅤㅤㅤInício</a>
+            <a href="sobre os elementos.html">Sobre</a>
+            <a href="terminologia.html">Terminologias</a>
+            <a href="tabela.html">Elementos Químicos</a>
+            
+        </nav>
+        <div class="search-container">
+            <input type="text" class="search-box" id="search-box" placeholder="Buscar...">
+        </div>
+        <button class="mode-icon" onclick="toggleMode()">🌙</button>
+    </header>
+        <!-- Seção da História da Tabela Periódica -->
+        <div class="historical-section">
+            <h1 style="text-align: center;">Tabela Periódica</h1>
+            <p>
+                A Tabela Periódica é uma representação organizada de todos os elementos químicos conhecidos, dispostos com base em suas propriedades físicas, químicas e no número atômico, que é a quantidade de prótons em seus átomos. Desenvolvida inicialmente pelo químico russo Dmitri Mendeleev em 1869, a tabela foi estruturada para identificar padrões nos elementos e prever a existência de outros ainda desconhecidos na época. Cada elemento é representado por seu símbolo químico e informações como número atômico e massa atômica. Dividida em grupos (colunas) e períodos (linhas), ela classifica os elementos em categorias como metais, não metais e gases nobres, facilitando o estudo e a aplicação dos princípios químicos na ciência, tecnologia e indústria. A Tabela Periódica não apenas organiza o conhecimento químico, mas também reflete a ordem e a beleza subjacentes à natureza.
+            </p>  
+ 
+        </div>
+    <div class="container">
+        <div class="tabela">
+            <!-- Linha 1 -->
+            <div class="element nonmetals"><span class="large">H</span>
+                <div class="element-info">
+                    <div class="atomic-number">1</div>
+                    <div class="element-name">Hidrogênio</div>
+                    <div class="atomic-weight">1.008</div>
+                </div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element noble-gases"><span class="large">He</span>
+                <div class="element-info">
+                    <div class="atomic-number">2</div>
+                    <div class="element-name">Hélio</div>
+                    <div class="atomic-weight">4.0026</div>
+                </div>
+            </div>
+
+
+
+            <!-- Linha 2 -->
+            <div class="element metal-alkaline"><span class="large">Li</span>
+                <div class="element-info">
+                    <div class="atomic-number">3</div>
+                    <div class="element-name">Lítio</div>
+                    <div class="atomic-weight">6.94</div>
+                </div>
+            </div>
+            <div class="element metal-alkaline-earth"><span class="large">Be</span>
+                <div class="element-info">
+                    <div class="atomic-number">4</div>
+                    <div class="element-name">Berílio</div>
+                    <div class="atomic-weight">9.0122</div>
+                </div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element metalloids"><span class="large">B</span>
+                <div class="element-info">
+                    <div class="atomic-number">5</div>
+                    <div class="element-name">Boro</div>
+                    <div class="atomic-weight">10.81</div>
+                </div>
+            </div>
+            <div class="element nonmetals"><span class="large">C</span>
+                <div class="element-info">
+                    <div class="atomic-number">6</div>
+                    <div class="element-name">Carbono</div>
+                    <div class="atomic-weight">12.01</div>
+                </div>
+            </div>
+            <div class="element nonmetals"><span class="large">N</span>
+                <div class="element-info">
+                    <div class="atomic-number">7</div>
+                    <div class="element-name">Nitrogênio</div>
+                    <div class="atomic-weight">14.007</div>
+                </div>
+            </div>
+            <div class="element nonmetals"><span class="large">O</span>
+                <div class="element-info">
+                    <div class="atomic-number">8</div>
+                    <div class="element-name">Oxigênio</div>
+                    <div class="atomic-weight">15.999</div>
+                </div>
+            </div>
+            <div class="element halogens"><span class="large">F</span>
+                <div class="element-info">
+                    <div class="atomic-number">9</div>
+                    <div class="element-name">Flúor</div>
+                    <div class="atomic-weight">18.998</div>
+                </div>
+            </div>
+            <div class="element noble-gases"><span class="large">Ne</span>
+                <div class="element-info">
+                    <div class="atomic-number">10</div>
+                    <div class="element-name">Neônio</div>
+                    <div class="atomic-weight">20.18</div>
+                </div>
+            </div>
+
+            <!-- Linha 3 -->
+            <div class="element metal-alkaline"><span class="large">Na</span>
+                <div class="element-info">
+                    <div class="atomic-number">11</div>
+                    <div class="element-name">Sódio</div>
+                    <div class="atomic-weight">22.99</div>
+                </div>
+            </div>
+            <div class="element metal-alkaline-earth"><span class="large">Mg</span>
+                <div class="element-info">
+                    <div class="atomic-number">12</div>
+                    <div class="element-name">Magnésio</div>
+                    <div class="atomic-weight">24.305</div>
+                </div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element metalloids"><span class="large">Al</span>
+                <div class="element-info">
+                    <div class="atomic-number">13</div>
+                    <div class="element-name">Alumínio</div>
+                    <div class="atomic-weight">26.9815</div>
+                </div>
+            </div>
+            <div class="element metalloids"><span class="large">Si</span>
+                <div class="element-info">
+                    <div class="atomic-number">14</div>
+                    <div class="element-name">Silício</div>
+                    <div class="atomic-weight">28.085</div>
+                </div>
+            </div>
+            <div class="element nonmetals"><span class="large">P</span>
+                <div class="element-info">
+                    <div class="atomic-number">15</div>
+                    <div class="element-name">Fósforo</div>
+                    <div class="atomic-weight">30.97376</div>
+                </div>
+            </div>
+            <div class="element nonmetals"><span class="large">S</span>
+                <div class="element-info">
+                    <div class="atomic-number">16</div>
+                    <div class="element-name">Enxofre</div>
+                    <div class="atomic-weight">32.06</div>
+                </div>
+            </div>
+            <div class="element halogens"><span class="large">Cl</span>
+                <div class="element-info">
+                    <div class="atomic-number">17</div>
+                    <div class="element-name">Cloro</div>
+                    <div class="atomic-weight">35.45</div>
+                </div>
+            </div>
+            <div class="element noble-gases"><span class="large">Ar</span>
+                <div class="element-info">
+                    <div class="atomic-number">18</div>
+                    <div class="element-name">Argônio</div>
+                    <div class="atomic-weight">39.95</div>
+                </div>
+            </div>
+
+            <!-- Linha 4 -->
+            <div class="element metal-alkaline"><span class="large">K</span>
+                <div class="element-info">
+                    <div class="atomic-number">19</div>
+                    <div class="element-name">Potássio</div>
+                    <div class="atomic-weight">39.098</div>
+                </div>
+            </div>
+            <div class="element metal-alkaline-earth"><span class="large">Ca</span>
+                <div class="element-info">
+                    <div class="atomic-number">20</div>
+                    <div class="element-name">Cálcio</div>
+                    <div class="atomic-weight">40.078</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Sc</span>
+                <div class="element-info">
+                    <div class="atomic-number">21</div>
+                    <div class="element-name">Escândio</div>
+                    <div class="atomic-weight">44.95591</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Ti</span>
+                <div class="element-info">
+                    <div class="atomic-number">22</div>
+                    <div class="element-name">Titânio</div>
+                    <div class="atomic-weight">47.867</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">V</span>
+                <div class="element-info">
+                    <div class="atomic-number">23</div>
+                    <div class="element-name">Vanádio</div>
+                    <div class="atomic-weight">50.9415</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Cr</span>
+                <div class="element-info">
+                    <div class="atomic-number">24</div>
+                    <div class="element-name">Cromo</div>
+                    <div class="atomic-weight">51.9961</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Mn</span>
+                <div class="element-info">
+                    <div class="atomic-number">25</div>
+                    <div class="element-name">Manganês</div>
+                    <div class="atomic-weight">54.93804</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Fe</span>
+                <div class="element-info">
+                    <div class="atomic-number">26</div>
+                    <div class="element-name">Ferro</div>
+                    <div class="atomic-weight">55.845</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Co</span>
+                <div class="element-info">
+                    <div class="atomic-number">27</div>
+                    <div class="element-name">Cobalto</div>
+                    <div class="atomic-weight">58.933</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Ni</span>
+                <div class="element-info">
+                    <div class="atomic-number">28</div>
+                    <div class="element-name">Níquel</div>
+                    <div class="atomic-weight">58.693</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Cu</span>
+                <div class="element-info">
+                    <div class="atomic-number">29</div>
+                    <div class="element-name">Cobre</div>
+                    <div class="atomic-weight">63.546</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Zn</span>
+                <div class="element-info">
+                    <div class="atomic-number">30</div>
+                    <div class="element-name">Zinco</div>
+                    <div class="atomic-weight">65.38</div>
+                </div>
+            </div>
+            <div class="element metalloids"><span class="large">Ga</span>
+                <div class="element-info">
+                    <div class="atomic-number">31</div>
+                    <div class="element-name">Gálio</div>
+                    <div class="atomic-weight">69.723</div>
+                </div>
+            </div>
+            <div class="element metalloids"><span class="large">Ge</span>
+                <div class="element-info">
+                    <div class="atomic-number">32</div>
+                    <div class="element-name">Germânio</div>
+                    <div class="atomic-weight">72.63</div>
+                </div>
+            </div>
+            <div class="element metalloids"><span class="large">As</span>
+                <div class="element-info">
+                    <div class="atomic-number">33</div>
+                    <div class="element-name">Arsênio</div>
+                    <div class="atomic-weight">74.9216</div>
+                </div>
+            </div>
+            <div class="element nonmetals"><span class="large">Se</span>
+                <div class="element-info">
+                    <div class="atomic-number">34</div>
+                    <div class="element-name">Selênio</div>
+                    <div class="atomic-weight">78.971</div>
+                </div>
+            </div>
+            <div class="element halogens"><span class="large">Br</span>
+                <div class="element-info">
+                    <div class="atomic-number">35</div>
+                    <div class="element-name">Bromo</div>
+                    <div class="atomic-weight">79.904</div>
+                </div>
+            </div>
+            <div class="element noble-gases"><span class="large">Kr</span>
+                <div class="element-info">
+                    <div class="atomic-number">36</div>
+                    <div class="element-name">Kriptônio</div>
+                    <div class="atomic-weight">83.798</div>
+                </div>
+            </div>
+
+            <!-- Linha 5 -->
+            <div class="element metal-alkaline"><span class="large">Rb</span>
+                <div class="element-info">
+                    <div class="atomic-number">37</div>
+                    <div class="element-name">Rubídio</div>
+                    <div class="atomic-weight">85.4678</div>
+                </div>
+            </div>
+            <div class="element metal-alkaline-earth"><span class="large">Sr</span>
+                <div class="element-info">
+                    <div class="atomic-number">38</div>
+                    <div class="element-name">Estrôncio</div>
+                    <div class="atomic-weight">87.62</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Y</span>
+                <div class="element-info">
+                    <div class="atomic-number">39</div>
+                    <div class="element-name">Ítrio</div>
+                    <div class="atomic-weight">88.90584</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Zr</span>
+                <div class="element-info">
+                    <div class="atomic-number">40</div>
+                    <div class="element-name">Zircônio</div>
+                    <div class="atomic-weight">91.224</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Nb</span>
+                <div class="element-info">
+                    <div class="atomic-number">41</div>
+                    <div class="element-name">Nióbio</div>
+                    <div class="atomic-weight">92.90637</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Mo</span>
+                <div class="element-info">
+                    <div class="atomic-number">42</div>
+                    <div class="element-name">Molibdênio</div>
+                    <div class="atomic-weight">95.95</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Tc</span>
+                <div class="element-info">
+                    <div class="atomic-number">43</div>
+                    <div class="element-name">Tecnécio</div>
+                    <div class="atomic-weight">98</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Ru</span>
+                <div class="element-info">
+                    <div class="atomic-number">44</div>
+                    <div class="element-name">Rutênio</div>
+                    <div class="atomic-weight">101.07</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Rh</span>
+                <div class="element-info">
+                    <div class="atomic-number">45</div>
+                    <div class="element-name">Ródio</div>
+                    <div class="atomic-weight">102.9055</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Pd</span>
+                <div class="element-info">
+                    <div class="atomic-number">46</div>
+                    <div class="element-name">Paládio</div>
+                    <div class="atomic-weight">106.42</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Ag</span>
+                <div class="element-info">
+                    <div class="atomic-number">47</div>
+                    <div class="element-name">Prata</div>
+                    <div class="atomic-weight">107.8682</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Cd</span>
+                <div class="element-info">
+                    <div class="atomic-number">48</div>
+                    <div class="element-name">Cádmio</div>
+                    <div class="atomic-weight">112.414</div>
+                </div>
+            </div>
+            <div class="element metalloids"><span class="large">In</span>
+                <div class="element-info">
+                    <div class="atomic-number">49</div>
+                    <div class="element-name">Índio</div>
+                    <div class="atomic-weight">114.818</div>
+                </div>
+            </div>
+            <div class="element metalloids"><span class="large">Sn</span>
+                <div class="element-info">
+                    <div class="atomic-number">50</div>
+                    <div class="element-name">Estanho</div>
+                    <div class="atomic-weight">118.71</div>
+                </div>
+            </div>
+            <div class="element metalloids"><span class="large">Sb</span>
+                <div class="element-info">
+                    <div class="atomic-number">51</div>
+                    <div class="element-name">Antimônio</div>
+                    <div class="atomic-weight">121.76</div>
+                </div>
+            </div>
+            <div class="element metalloids"><span class="large">Te</span>
+                <div class="element-info">
+                    <div class="atomic-number">52</div>
+                    <div class="element-name">Telúrio</div>
+                    <div class="atomic-weight">127.6</div>
+                </div>
+            </div>
+            <div class="element halogens"><span class="large">I</span>
+                <div class="element-info">
+                    <div class="atomic-number">53</div>
+                    <div class="element-name">Iodo</div>
+                    <div class="atomic-weight">126.90447</div>
+                </div>
+            </div>
+            <div class="element noble-gases"><span class="large">Xe</span>
+                <div class="element-info">
+                    <div class="atomic-number">54</div>
+                    <div class="element-name">Xenônio</div>
+                    <div class="atomic-weight">131.293</div>
+                </div>
+            </div>
+
+            <!-- Linha 6 -->
+            <div class="element metal-alkaline"><span class="large">Cs</span>
+                <div class="element-info">
+                    <div class="atomic-number">55</div>
+                    <div class="element-name">Césio</div>
+                    <div class="atomic-weight">132.90545196</div>
+                </div>
+            </div>
+            <div class="element metal-alkaline-earth"><span class="large">Ba</span>
+                <div class="element-info">
+                    <div class="atomic-number">56</div>
+                    <div class="element-name">Bário</div>
+                    <div class="atomic-weight">137.327</div>
+                </div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element transition-metals"><span class="large">Hf</span>
+                <div class="element-info">
+                    <div class="atomic-number">72</div>
+                    <div class="element-name">Háfnio</div>
+                    <div class="atomic-weight">178.49</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Ta</span>
+                <div class="element-info">
+                    <div class="atomic-number">73</div>
+                    <div class="element-name">Tântalo</div>
+                    <div class="atomic-weight">180.94788</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">W</span>
+                <div class="element-info">
+                    <div class="atomic-number">74</div>
+                    <div class="element-name">Tungstênio</div>
+                    <div class="atomic-weight">183.84</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Re</span>
+                <div class="element-info">
+                    <div class="atomic-number">75</div>
+                    <div class="element-name">Rênio</div>
+                    <div class="atomic-weight">186.207</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Os</span>
+                <div class="element-info">
+                    <div class="atomic-number">76</div>
+                    <div class="element-name">Ósmio</div>
+                    <div class="atomic-weight">190.23</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Ir</span>
+                <div class="element-info">
+                    <div class="atomic-number">77</div>
+                    <div class="element-name">Irídio</div>
+                    <div class="atomic-weight">192.217</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Pt</span>
+                <div class="element-info">
+                    <div class="atomic-number">78</div>
+                    <div class="element-name">Platina</div>
+                    <div class="atomic-weight">195.084</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Au</span>
+                <div class="element-info">
+                    <div class="atomic-number">79</div>
+                    <div class="element-name">Ouro</div>
+                    <div class="atomic-weight">196.966569</div>
+                </div>
+            </div>
+            <div class="element transition-metals"><span class="large">Hg</span>
+                <div class="element-info">
+                    <div class="atomic-number">80</div>
+                    <div class="element-name">Mercúrio</div>
+                    <div class="atomic-weight">200.59</div>
+                </div>
+            </div>
+            <div class="element metalloids"><span class="large">Tl</span>
+                <div class="element-info">
+                    <div class="atomic-number">81</div>
+                    <div class="element-name">Tálio</div>
+                    <div class="atomic-weight">204.38</div>
+                </div>
+            </div>
+            <div class="element metalloids"><span class="large">Pb</span>
+                <div class="element-info">
+                    <div class="atomic-number">82</div>
+                    <div class="element-name">Chumbo</div>
+                    <div class="atomic-weight">207.2</div>
+                </div>
+            </div>
+            <div class="element metalloids"><span class="large">Bi</span>
+                <div class="element-info">
+                    <div class="atomic-number">83</div>
+                    <div class="element-name">Bismuto</div>
+                    <div class="atomic-weight">208.98040</div>
+                </div>
+            </div>
+            <div class="element metalloids"><span class="large">Po</span>
+                <div class="element-info">
+                    <div class="atomic-number">84</div>
+                    <div class="element-name">Polônio</div>
+                    <div class="atomic-weight">209</div>
+                </div>
+            </div>
+            <div class="element halogens"><span class="large">At</span>
+                <div class="element-info">
+                    <div class="atomic-number">85</div>
+                    <div class="element-name">Astato</div>
+                    <div class="atomic-weight">210</div>
+                </div>
+            </div>
+            <div class="element noble-gases"><span class="large">Rn</span>
+                <div class="element-info">
+                    <div class="atomic-number">86</div>
+                    <div class="element-name">Radônio</div>
+                    <div class="atomic-weight">222</div>
+                </div>
+            </div>
+            <!-- Linha 7 -->
+            <div class="element metal-alkaline"><span class="large">Fr</span>
+                <div class="element-info">
+                    <div class="atomic-number">87</div>
+                    <div class="element-name">Frâncio</div>
+                    <div class="atomic-weight">223</div>
+                </div>
+            </div>
+            <div class="element metal-alkaline-earth"><span class="large">Ra</span>
+                <div class="element-info">
+                    <div class="atomic-number">88</div>
+                    <div class="element-name">Rádio</div>
+                    <div class="atomic-weight">226</div>
+                </div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element actinides"><span class="large">Rf</span>
+                <div class="element-info">
+                    <div class="atomic-number">104</div>
+                    <div class="element-name">Rutherfórdio</div>
+                    <div class="atomic-weight">267</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Db</span>
+                <div class="element-info">
+                    <div class="atomic-number">105</div>
+                    <div class="element-name">Dúbnio</div>
+                    <div class="atomic-weight">268</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Sg</span>
+                <div class="element-info">
+                    <div class="atomic-number">106</div>
+                    <div class="element-name">Seabórgio</div>
+                    <div class="atomic-weight">271</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Bh</span>
+                <div class="element-info">
+                    <div class="atomic-number">107</div>
+                    <div class="element-name">Bóhrio</div>
+                    <div class="atomic-weight">270</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Hs</span>
+                <div class="element-info">
+                    <div class="atomic-number">108</div>
+                    <div class="element-name">Hássio</div>
+                    <div class="atomic-weight">277</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Mt</span>
+                <div class="element-info">
+                    <div class="atomic-number">109</div>
+                    <div class="element-name">Meitnério</div>
+                    <div class="atomic-weight">278</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Ds</span>
+                <div class="element-info">
+                    <div class="atomic-number">110</div>
+                    <div class="element-name">Darmstádtio</div>
+                    <div class="atomic-weight">281</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Rg</span>
+                <div class="element-info">
+                    <div class="atomic-number">111</div>
+                    <div class="element-name">Roentgênio</div>
+                    <div class="atomic-weight">282</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Cn</span>
+                <div class="element-info">
+                    <div class="atomic-number">112</div>
+                    <div class="element-name">Copernício</div>
+                    <div class="atomic-weight">285</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Nh</span>
+                <div class="element-info">
+                    <div class="atomic-number">113</div>
+                    <div class="element-name">Nihônio</div>
+                    <div class="atomic-weight">286</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Fl</span>
+                <div class="element-info">
+                    <div class="atomic-number">114</div>
+                    <div class="element-name">Fleróvio</div>
+                    <div class="atomic-weight">289</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Mc</span>
+                <div class="element-info">
+                    <div class="atomic-number">115</div>
+                    <div class="element-name">Moscóvio</div>
+                    <div class="atomic-weight">290</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Lv</span>
+                <div class="element-info">
+                    <div class="atomic-number">116</div>
+                    <div class="element-name">Livermório</div>
+                    <div class="atomic-weight">293</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Ts</span>
+                <div class="element-info">
+                    <div class="atomic-number">117</div>
+                    <div class="element-name">Tenessino</div>
+                    <div class="atomic-weight">294</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Og</span>
+                <div class="element-info">
+                    <div class="atomic-number">118</div>
+                    <div class="element-name">Oganessônio</div>
+                    <div class="atomic-weight">294</div>
+                </div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+
+            <div class="element lanthanides"><span class="large">La</span>
+                <div class="element-info">
+                    <div class="atomic-number">57</div>
+                    <div class="element-name">Lantânio</div>
+                    <div class="atomic-weight">138.90547</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Ce</span>
+                <div class="element-info">
+                    <div class="atomic-number">58</div>
+                    <div class="element-name">Cério</div>
+                    <div class="atomic-weight">140.116</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Pr</span>
+                <div class="element-info">
+                    <div class="atomic-number">59</div>
+                    <div class="element-name">Praseodímio</div>
+                    <div class="atomic-weight">140.90766</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Nd</span>
+                <div class="element-info">
+                    <div class="atomic-number">60</div>
+                    <div class="element-name">Neodímio</div>
+                    <div class="atomic-weight">144.242</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Pm</span>
+                <div class="element-info">
+                    <div class="atomic-number">61</div>
+                    <div class="element-name">Promécio</div>
+                    <div class="atomic-weight">145</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Sm</span>
+                <div class="element-info">
+                    <div class="atomic-number">62</div>
+                    <div class="element-name">Samário</div>
+                    <div class="atomic-weight">150.36</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Eu</span>
+                <div class="element-info">
+                    <div class="atomic-number">63</div>
+                    <div class="element-name">Európio</div>
+                    <div class="atomic-weight">151.964</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Gd</span>
+                <div class="element-info">
+                    <div class="atomic-number">64</div>
+                    <div class="element-name">Gadolínio</div>
+                    <div class="atomic-weight">157.25</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Tb</span>
+                <div class="element-info">
+                    <div class="atomic-number">65</div>
+                    <div class="element-name">Térbio</div>
+                    <div class="atomic-weight">158.92535</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Dy</span>
+                <div class="element-info">
+                    <div class="atomic-number">66</div>
+                    <div class="element-name">Disprósio</div>
+                    <div class="atomic-weight">162.5</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Ho</span>
+                <div class="element-info">
+                    <div class="atomic-number">67</div>
+                    <div class="element-name">Hólmio</div>
+                    <div class="atomic-weight">164.93033</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Er</span>
+                <div class="element-info">
+                    <div class="atomic-number">68</div>
+                    <div class="element-name">Érbio</div>
+                    <div class="atomic-weight">167.259</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Tm</span>
+                <div class="element-info">
+                    <div class="atomic-number">69</div>
+                    <div class="element-name">Túlio</div>
+                    <div class="atomic-weight">168.93422</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Yb</span>
+                <div class="element-info">
+                    <div class="atomic-number">70</div>
+                    <div class="element-name">Itérbio</div>
+                    <div class="atomic-weight">173.045</div>
+                </div>
+            </div>
+            <div class="element lanthanides"><span class="large">Lu</span>
+                <div class="element-info">
+                    <div class="atomic-number">71</div>
+                    <div class="element-name">Lutécio</div>
+                    <div class="atomic-weight">174.9668</div>
+                </div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element blanco"><span class="large"></span>
+                <div class="element-name">ㅤ</div>
+            </div>
+            <div class="element actinides"><span class="large">Ac</span>
+                <div class="element-info">
+                    <div class="atomic-number">89</div>
+                    <div class="element-name">Actínio</div>
+                    <div class="atomic-weight">227</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Th</span>
+                <div class="element-info">
+                    <div class="atomic-number">90</div>
+                    <div class="element-name">Tório</div>
+                    <div class="atomic-weight">232.03806</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Pa</span>
+                <div class="element-info">
+                    <div class="atomic-number">91</div>
+                    <div class="element-name">Protactínio</div>
+                    <div class="atomic-weight">231.03588</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">U</span>
+                <div class="element-info">
+                    <div class="atomic-number">92</div>
+                    <div class="element-name">Urânio</div>
+                    <div class="atomic-weight">238.02891</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Np</span>
+                <div class="element-info">
+                    <div class="atomic-number">93</div>
+                    <div class="element-name">Neptúnio</div>
+                    <div class="atomic-weight">237</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Pu</span>
+                <div class="element-info">
+                    <div class="atomic-number">94</div>
+                    <div class="element-name">Plutônio</div>
+                    <div class="atomic-weight">244</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Am</span>
+                <div class="element-info">
+                    <div class="atomic-number">95</div>
+                    <div class="element-name">Amerício</div>
+                    <div class="atomic-weight">243</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Cm</span>
+                <div class="element-info">
+                    <div class="atomic-number">96</div>
+                    <div class="element-name">Cúrio</div>
+                    <div class="atomic-weight">247</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Bk</span>
+                <div class="element-info">
+                    <div class="atomic-number">97</div>
+                    <div class="element-name">Berquélio</div>
+                    <div class="atomic-weight">247</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Cf</span>
+                <div class="element-info">
+                    <div class="atomic-number">98</div>
+                    <div class="element-name">Califórnio</div>
+                    <div class="atomic-weight">251</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Es</span>
+                <div class="element-info">
+                    <div class="atomic-number">99</div>
+                    <div class="element-name">Einsteinio</div>
+                    <div class="atomic-weight">252</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Fm</span>
+                <div class="element-info">
+                    <div class="atomic-number">100</div>
+                    <div class="element-name">Férmio</div>
+                    <div class="atomic-weight">257</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Md</span>
+                <div class="element-info">
+                    <div class="atomic-number">101</div>
+                    <div class="element-name">Mendelévio</div>
+                    <div class="atomic-weight">258</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">No</span>
+                <div class="element-info">
+                    <div class="atomic-number">102</div>
+                    <div class="element-name">Nobélio</div>
+                    <div class="atomic-weight">259</div>
+                </div>
+            </div>
+            <div class="element actinides"><span class="large">Lr</span>
+                <div class="element-info">
+                    <div class="atomic-number">103</div>
+                    <div class="element-name">Laurêncio</div>
+                    <div class="atomic-weight">262</div>
+                </div>
+            </div>
+        </div>
+
+    
+        <div class="invisivel">Isso é so para um esp</div>
+        <div class="legenda">
+            <div class="layout-container">
+                <div class="legend-container">
+                    <div class="legend">
+                        <ul>
+                            <li data-filter="metal-alkaline">
+                                <span class="color" style="background-color: #ff6f61;"></span>Metais Alcalinos
+                            </li>
+                            <li data-filter="metal-alkaline-earth">
+                                <span class="color" style="background-color: #ffb27a;"></span>Metais Alcalinos Terrosos
+                            </li>
+                            <li data-filter="metalloids">
+                                <span class="color" style="background-color: #b0e57c;"></span>Metaloides
+                            </li>
+                            <li data-filter="nonmetals">
+                                <span class="color" style="background-color: #76d7ea;"></span>Não Metais
+                            </li>
+                            <li data-filter="halogens">
+                                <span class="color" style="background-color: #ff6fae;"></span>Halogênios
+                            </li>
+                            <li data-filter="noble-gases">
+                                <span class="color" style="background-color: #d4a1ff;"></span>Gases Nobres
+                            </li>
+                            <li data-filter="lanthanides">
+                                <span class="color" style="background-color: #b39ddb;"></span>Lantanídeos
+                            </li>
+                            <li data-filter="actinides" class="lege">
+                                <span class="color" style="background-color: #ffcc80;"></span>Actinídeos
+                            </li>
+                            <li data-filter="transition-metals">
+                                <span class="color" style="background-color: #90a4ae;"></span>Metais de Transição
+                            </li>
+                        </ul>
+                    </div>
+                    <button id="show-all">Mostrar Todos</button>
+                </div>
+                <div class="tabela">
+                </div>
+            </div>
+        </div>
+        
+        
+
+
+
+
+
+
+
+
+
+
+        <script>
+            
+    // Função para alternar entre os modos
+    function toggleMode() {
+        const body = document.body;
+        const button = document.querySelector('.mode-icon');
+
+        // Alterna entre os modos
+        if (body.classList.contains('light-mode')) {
+            body.classList.remove('light-mode');
+            body.classList.add('dark-mode');
+            button.textContent = '☀️';
+            localStorage.setItem('theme', 'dark-mode'); // Salva o estado no Local Storage
+        } else {
+            body.classList.remove('dark-mode');
+            body.classList.add('light-mode');
+            button.textContent = '🌙';
+            localStorage.setItem('theme', 'light-mode'); // Salva o estado no Local Storage
+        }
+    }
+
+    // Função para carregar o modo salvo no Local Storage
+    function loadTheme() {
+        const savedTheme = localStorage.getItem('theme'); // Recupera o estado salvo
+        const body = document.body;
+        const button = document.querySelector('.mode-icon');
+
+        if (savedTheme === 'dark-mode') {
+            body.classList.add('dark-mode');
+            body.classList.remove('light-mode');
+            button.textContent = '☀️';
+        } else {
+            body.classList.add('light-mode');
+            body.classList.remove('dark-mode');
+            button.textContent = '🌙';
+        }
+    }
+
+    // Carrega o tema ao carregar a página
+    document.addEventListener('DOMContentLoaded', loadTheme);
+
+
+
+            // Função para remover acentos e pontuações
+            function normalizeString(str) {
+                return str.normalize("NFD").replace(/[\u0300-\u036f]/g, '').replace(/[^\w\s]|_/g, "").toLowerCase();
+            }
+
+            // Função para exibir todos os elementos ou filtrar por classe da legenda
+            function filterElementsByClass(filterClass) {
+                const elements = document.querySelectorAll('.element');
+
+                elements.forEach(element => {
+                    const hasClass = element.classList.contains(filterClass);
+                    const isEmpty = element.classList.contains('nada') && element.classList.contains('blanco');
+
+                    if (filterClass === "all") {
+                        element.style.display = 'flex';  // Mostra todos os elementos
+                    } else if (filterClass === "blanco" && isEmpty) {
+                        element.style.display = 'flex';  // Mostra divs vazias se for "blanco"
+                    } else if (hasClass) {
+                        element.style.display = 'flex';  // Mostra elementos com a classe correta
+                    } else {
+                        element.style.display = 'none';  // Oculta os elementos que não correspondem
+                    }
+                });
+            }
+
+
+            // Adiciona evento de clique nos itens da legenda para filtrar elementos
+            document.querySelectorAll('.legend li').forEach(item => {
+                item.addEventListener('click', function () {
+                    const filterClass = this.getAttribute('data-filter');
+                    filterElementsByClass(filterClass);  // Chama a função de filtragem pela classe
+                });
+            });
+
+            // Exibe todos os elementos quando o botão "Mostrar Todos" é clicado
+            document.getElementById('show-all').addEventListener('click', function () {
+                filterElementsByClass("all");  // Mostra todos os elementos
+            });
+
+ // Função de pesquisa
+document.getElementById('search-box').addEventListener('keyup', function () {
+    const query = normalizeString(this.value);
+    const elements = document.querySelectorAll('.element:not(.ignore-me)'); // Seleciona apenas os elementos não ignorados
+
+    elements.forEach(element => {
+        const elementName = normalizeString(element.querySelector('.element-name').textContent);
+        const symbol = normalizeString(element.querySelector('.large').textContent);
+
+        // Mostra o elemento se o nome ou símbolo corresponder à pesquisa
+        if ((elementName || symbol) && (elementName.includes(query) || symbol.includes(query))) {
+            element.style.display = 'flex';
+        } else {
+            element.style.display = 'none';
+        }
+    });
+
+    // Oculta as divs vazias ao realizar a pesquisa
+    const emptyDivs = document.querySelectorAll('.empty');
+    if (query.length > 0) {
+        emptyDivs.forEach(empty => {
+            empty.style.display = 'none'; // Esconde divs vazias
+        });
+    } else {
+        // Se a pesquisa estiver vazia, mostra as divs vazias e reorganiza a exibição dos elementos
+        emptyDivs.forEach(empty => {
+            empty.style.display = 'block'; // Mostra divs vazias
+        });
+
+        // Opcional: Pode querer exibir todos os elementos de volta
+        elements.forEach(element => {
+            element.style.display = 'flex'; // Mostra todos os elementos
+        });
+    }
+});
+
+
+            // Destacar elementos ao passar o mouse na legenda
+            document.querySelectorAll('.legend li').forEach(item => {
+                item.addEventListener('mouseover', function () {
+                    const filterClass = this.getAttribute('data-filter');
+
+                    // Seleciona os elementos da tabela periódica correspondentes à classe química
+                    document.querySelectorAll(`.element.${filterClass}`).forEach(element => {
+                        element.classList.add('highlight'); // Adiciona a animação de tremor e expansão
+                    });
+                });
+
+                item.addEventListener('mouseout', function () {
+                    const filterClass = this.getAttribute('data-filter');
+
+                    // Remove a animação de tremor e expansão quando o mouse sai da legenda
+                    document.querySelectorAll(`.element.${filterClass}`).forEach(element => {
+                        element.classList.remove('highlight'); // Remove a classe 'highlight'
+                    });
+                });
+            });
+
+
+            const elementDescriptions = {
+  "Hidrogênio": "O Hidrogênio é o elemento químico mais leve e o mais abundante no universo, sendo essencial para a formação de estrelas e galáxias. Ele é utilizado em diversas reações químicas, como combustível em células de hidrogênio e em reações de fusão nuclear, além de ser um componente fundamental na água (H2O).",
+  "Hélio": "O Hélio é o segundo elemento mais leve e o segundo mais abundante no universo. Ele é conhecido por sua estabilidade e baixa reatividade química, sendo amplamente utilizado em balões de ar quente, como gás de proteção em soldagens e em câmaras de ressonância magnética.",
+  "Lítio": "O Lítio é um metal alcalino leve e altamente reativo. Sua principal aplicação está em baterias recarregáveis de íon-lítio, utilizadas em dispositivos eletrônicos como smartphones e veículos elétricos, devido à sua excelente capacidade de armazenamento de energia e baixa densidade.",
+  "Berílio": "O Berílio é um metal raro, leve e rígido, com alta resistência térmica. Ele é usado em ligas metálicas, especialmente na fabricação de componentes aeroespaciais e militares, além de ser utilizado em dispositivos de raios X devido à sua transparência para a radiação.",
+  "Boro": "O Boro é um metaloide encontrado em minerais e amplamente utilizado em compostos que melhoram a resistência de fibras de vidro e cerâmicas. Ele também desempenha um papel importante em fertilizantes e como dopante em semicondutores na indústria eletrônica.",
+  "Carbono": "O Carbono é o elemento base de todas as formas de vida conhecidas, formando estruturas complexas como proteínas, carboidratos, lipídios e ácidos nucleicos. Ele também é o principal componente de combustíveis fósseis e materiais como o grafite e o diamante.",
+  "Nitrogênio": "O Nitrogênio é um gás incolor e inodoro que compõe cerca de 78% da atmosfera terrestre. Ele é essencial para a formação de compostos como proteínas e ácidos nucleicos, e é utilizado na produção de fertilizantes, explosivos e na indústria de alimentos como conservante.",
+  "Oxigênio": "O Oxigênio é vital para a respiração celular em organismos aeróbicos. Ele compõe aproximadamente 21% da atmosfera terrestre e é o elemento mais abundante na crosta terrestre, estando presente em óxidos minerais e na água. É amplamente utilizado na indústria metalúrgica e médica.",
+  "Flúor": "O Flúor é um halogênio altamente reativo e corrosivo. Ele é utilizado em produtos dentários, como pastas de dente e tratamentos para fortalecer o esmalte dos dentes, além de ser empregado na fabricação de gases refrigerantes e na produção de compostos químicos industriais.",
+  "Neônio": "O Neônio é um gás nobre que emite uma luz brilhante quando submetido a uma corrente elétrica. Ele é amplamente utilizado em letreiros luminosos e sinais publicitários devido à sua capacidade de emitir luz em cores vibrantes quando eletrificado.",
+  "Sódio": "O Sódio é um metal alcalino macio e altamente reativo, encontrado principalmente na forma de cloreto de sódio (sal de cozinha). Ele desempenha um papel crucial no equilíbrio de fluidos e na condução de impulsos nervosos no corpo humano.",
+  "Magnésio": "O Magnésio é um metal leve e resistente, essencial para várias funções biológicas, incluindo a produção de energia e a síntese de proteínas. Ele é usado em ligas metálicas leves para componentes automotivos e aeroespaciais, além de estar presente em muitos suplementos alimentares.",
+  "Alumínio": "O Alumínio é um metal leve, maleável e resistente à corrosão, amplamente utilizado em embalagens, na construção civil e em veículos. Suas propriedades de leveza e resistência o tornam ideal para uso em estruturas de transporte e componentes elétricos.",
+  "Silício": "O Silício é o segundo elemento mais abundante na crosta terrestre e é amplamente utilizado na indústria eletrônica, principalmente na fabricação de semicondutores e circuitos integrados. Ele também é um componente fundamental na fabricação de vidro e cerâmicas.",
+  "Fósforo": "O Fósforo é essencial para todos os seres vivos, sendo um componente chave do DNA, RNA e das moléculas de ATP. Ele é amplamente utilizado na produção de fertilizantes, produtos químicos industriais e, historicamente, em fósforos de segurança.",
+  "Enxofre": "O Enxofre é um não-metal amplamente utilizado na fabricação de ácido sulfúrico, um dos produtos químicos mais importantes na indústria. Ele também é um componente essencial em aminoácidos e vitaminas, e pode ser encontrado em depósitos naturais e em vulcões.",
+  "Cloro": "O Cloro é um halogênio utilizado como desinfetante em tratamentos de água potável e em piscinas, além de ser um componente fundamental na fabricação de plásticos como o PVC. Seu uso industrial é extenso, abrangendo desde a produção de solventes até pesticidas.",
+  "Argônio": "O Argônio é um gás nobre inerte, amplamente utilizado em lâmpadas incandescentes, soldagem e em ambientes onde a reatividade química deve ser minimizada. Ele também é utilizado em câmaras de ionização para detectar radiação.",
+  "Potássio": "O Potássio é um metal alcalino essencial para a função celular, particularmente na manutenção do equilíbrio de eletrólitos e na condução de impulsos nervosos. Ele é amplamente utilizado em fertilizantes agrícolas e em algumas aplicações industriais.",
+  "Cálcio": "O Cálcio é um metal alcalino-terroso essencial para a formação de ossos e dentes em organismos vivos. Industrialmente, ele é utilizado na produção de cimento, na purificação de metais e na fabricação de materiais refratários.",
+  "Escândio": "O Escândio é um metal raro utilizado em ligas de alumínio para aumentar a resistência e durabilidade de componentes leves, como aqueles usados na indústria aeroespacial. Ele também é utilizado em lâmpadas de alta intensidade.",
+  "Titânio": "O Titânio é um metal forte, leve e altamente resistente à corrosão, amplamente utilizado em próteses médicas, na construção de aeronaves e em equipamentos industriais. Sua resistência à corrosão e biocompatibilidade o tornam ideal para usos médicos.",
+  "Vanádio": "O Vanádio é um metal de transição utilizado principalmente na produção de ligas de aço de alta resistência. Ele é utilizado em componentes automotivos, ferramentas de corte e equipamentos de alta pressão.",
+  "Cromo": "O Cromo é um metal brilhante e resistente à corrosão, amplamente utilizado em cromagem para revestimentos protetores e na produção de aços inoxidáveis. Ele também é utilizado como pigmento em tintas e em processos de curtimento de couro.",
+  "Manganês": "O Manganês é um metal essencial para a produção de aço, onde melhora a resistência e a durabilidade do material. Ele também desempenha um papel biológico importante na função enzimática e no metabolismo humano.",
+  "Ferro": "O Ferro é o metal mais amplamente utilizado no mundo, sendo o principal componente do aço. Ele é vital para a fabricação de materiais de construção, transporte e maquinário. Além disso, o ferro é um componente essencial da hemoglobina no sangue humano.",
+  "Cobalto": "O Cobalto é um metal utilizado em ligas resistentes ao desgaste e em baterias recarregáveis, como as de íon-lítio. Biologicamente, ele é um componente da vitamina B12, essencial para a produção de glóbulos vermelhos no corpo humano.",
+  "Níquel": "O Níquel é utilizado principalmente em ligas metálicas para aumentar a resistência à corrosão e a durabilidade. Ele é amplamente utilizado na fabricação de moedas, baterias e equipamentos industriais.",
+  "Cobre": "O Cobre é um dos melhores condutores de eletricidade e calor, sendo amplamente utilizado em fios elétricos, circuitos e sistemas de aquecimento. Ele também é usado em ligas metálicas, como o bronze, e em utensílios de cozinha.",
+  "Zinco": "O Zinco é utilizado principalmente no processo de galvanização, que protege o aço da corrosão. Ele também é um componente em ligas metálicas como o latão e é importante para a saúde humana, desempenhando um papel no sistema imunológico.",
+  "Gálio": "O Gálio é amplamente utilizado na indústria eletrônica, especialmente em dispositivos semicondutores como LEDs e painéis solares. Ele também tem aplicações em ligas de baixo ponto de fusão e em termômetros de alta precisão.",
+  "Germânio": "O Germânio é utilizado em semicondutores, especialmente em transistores e dispositivos de fibra óptica. Ele tem um papel importante na eletrônica moderna e em detectores de radiação.",
+  "Arsênio": "O Arsênio é utilizado em ligas de chumbo para aumentar sua dureza, além de ser importante na fabricação de semicondutores. Historicamente, também foi usado em pesticidas e tratamentos de madeira, embora seu uso tenha diminuído devido à toxicidade.",
+  "Selênio": "O Selênio é um metaloide utilizado na fabricação de células solares, em fotocopiadoras e na indústria do vidro para remover a cor verde causada por impurezas de ferro. Ele também é um micronutriente essencial para a saúde humana, embora em quantidades muito pequenas.",
+  "Bromo": "O Bromo é um líquido à temperatura ambiente utilizado em retardantes de chama, em tratamentos de água e na fotografia. Ele também tem aplicações em produtos farmacêuticos e na indústria de perfuração de poços de petróleo.",
+  "Criptônio": "O Criptônio é um gás nobre utilizado em lâmpadas fluorescentes e em alguns tipos de lasers. Ele também é usado na fotografia de alta velocidade devido à sua emissão de luz branca brilhante quando eletrificado.",
+  "Rubídio": "O Rubídio é um metal alcalino macio e altamente reativo, semelhante ao potássio e ao césio. Ele é utilizado em pesquisas científicas, como em relógios atômicos, e também tem aplicações em medicina e no estudo de plasmas.",
+  "Estrôncio": "O Estrôncio é um metal alcalino-terroso utilizado em pirotecnia para produzir chamas vermelhas intensas. Também é usado em ligas metálicas e na fabricação de materiais para a indústria eletrônica.",
+  "Ítrio": "O Ítrio é um metal de transição usado em LEDs e fósforos de televisores. Ele também é utilizado em lasers e como aditivo para melhorar a resistência de ligas metálicas.",
+  "Zircônio": "O Zircônio é um metal resistente à corrosão usado em ligas metálicas e em reatores nucleares devido à sua capacidade de resistir a altas temperaturas. Ele também é utilizado na fabricação de cerâmicas e ferramentas de corte.",
+  "Nióbio": "O Nióbio é um metal de transição utilizado em superligas de aço que são resistentes ao calor e à corrosão. Ele é amplamente empregado na indústria aeroespacial e em reatores nucleares.",
+  "Molibdênio": "O Molibdênio é um metal de transição utilizado em ligas de aço para aumentar a dureza e resistência ao calor. Ele é amplamente utilizado na fabricação de ferramentas, componentes de motores e em catalisadores industriais.",
+  "Tecnécio": "O Tecnécio é o primeiro elemento sintético da tabela periódica, usado em medicina nuclear para diagnósticos de imagem. Ele também é utilizado em algumas ligas metálicas como inibidor de corrosão.",
+  "Rutênio": "O Rutênio é um metal de transição utilizado em ligas de platina e paládio para aumentar sua dureza. Ele também é utilizado em catalisadores e em alguns tipos de semicondutores.",
+  "Ródio": "O Ródio é um metal raro e altamente resistente à corrosão, usado principalmente em catalisadores automotivos para reduzir as emissões de gases. Ele também é utilizado em joias e na fabricação de espelhos.",
+  "Paládio": "O Paládio é um metal raro amplamente utilizado em catalisadores automotivos e na indústria de eletrônicos. Ele também é utilizado em joalheria e na purificação de hidrogênio.",
+  "Prata": "A Prata é um excelente condutor de eletricidade e é amplamente utilizada em circuitos eletrônicos, além de joalheria, moedas e fotografia. Tem propriedades antibacterianas e é usada em medicina.",
+  "Cádmio": "O Cádmio é um metal tóxico, utilizado em baterias de níquel-cádmio e como pigmento em tintas. Seu uso tem sido restrito devido à sua toxicidade, especialmente em relação ao meio ambiente.",
+  "Índio": "O Índio é um metal macio utilizado em telas de cristal líquido (LCD) e em ligas de baixa fusão. Ele também é importante na fabricação de semicondutores e dispositivos de toque.",
+  "Estanho": "O Estanho é um metal utilizado em ligas, como o bronze, e para revestir outros metais a fim de evitar a corrosão. Ele é amplamente utilizado em soldas e na fabricação de latas de alimentos.",
+  "Antimônio": "O Antimônio é um metaloide usado em ligas para aumentar a resistência e a dureza de outros metais. Ele também é utilizado em retardantes de chama e em semicondutores.",
+  "Telúrio": "O Telúrio é um metaloide utilizado em ligas metálicas e semicondutores, além de ser importante na indústria solar. Ele também é utilizado em materiais termoelétricos.",
+  "Iodo": "O Iodo é um halogênio utilizado como antisséptico e no tratamento de deficiências de tireoide. Ele também é utilizado na produção de corantes e compostos químicos.",
+  "Xenônio": "O Xenônio é um gás nobre utilizado em lâmpadas de descarga de alta intensidade, como faróis de carros, e em anestesia geral. Ele também é utilizado em lasers e em estudos científicos.",
+  "Césio": "O Césio é um metal alcalino altamente reativo, utilizado principalmente em relógios atômicos e em sondas de perfuração de poços de petróleo. Ele também tem aplicações em propulsão iônica em satélites.",
+  "Bário": "O Bário é um metal alcalino-terroso utilizado em radiografias do trato gastrointestinal, onde ele absorve os raios X. Também é utilizado em fogos de artifício para criar cores verdes.",
+  "Lantânio": "O Lantânio é um metal de terras raras utilizado em baterias recarregáveis, especialmente em veículos híbridos. Ele também é usado em catalisadores e na produção de vidros especiais.",
+  "Cério": "O Cério é o mais abundante dos metais de terras raras, utilizado em catalisadores automotivos e em polimento de vidros. Ele também é utilizado em ligas metálicas e em alguns tipos de lâmpadas.",
+  "Praseodímio": "O Praseodímio é um metal de terras raras utilizado em ligas de magnésio e em ímãs de alta resistência. Ele também é utilizado em lasers e em vidros ópticos especiais.",
+  "Neodímio": "O Neodímio é um metal de terras raras amplamente utilizado em ímãs de alta potência, como aqueles usados em motores elétricos e em fones de ouvido. Ele também é utilizado em lasers.",
+  "Promécio": "O Promécio é um metal radioativo utilizado em baterias nucleares de longa duração e em alguns tipos de marcadores luminosos. Ele tem aplicações limitadas devido à sua radioatividade.",
+  "Samário": "O Samário é um metal de terras raras utilizado em ímãs permanentes de alta resistência e em reatores nucleares. Ele também tem aplicações em lasers e em vidros ópticos.",
+  "Európio": "O Európio é um metal de terras raras utilizado em fósforos de televisores e em lâmpadas fluorescentes. Ele também é utilizado em materiais luminescentes e em reatores nucleares.",
+  "Gadolínio": "O Gadolínio é utilizado em agentes de contraste para ressonância magnética e em alguns tipos de reatores nucleares. Ele também tem aplicações em ligas metálicas e em materiais magnéticos.",
+  "Térbio": "O Térbio é um metal de terras raras utilizado em fósforos de telas e em dispositivos de iluminação. Ele também é utilizado em ligas e em materiais magnetoestrictivos.",
+  "Disprósio": "O Disprósio é um metal de terras raras utilizado em ímãs permanentes e em reatores nucleares. Ele também tem aplicações em materiais magnetoestrictivos e em lasers.",
+  "Hólmio": "O Hólmio é um metal de terras raras utilizado em ímãs de alta potência e em dispositivos de ressonância magnética. Ele também tem aplicações em lasers e em alguns tipos de cristais ópticos.",
+  "Érbio": "O Érbio é utilizado em fibras ópticas para amplificação de sinais e em lasers médicos. Ele também tem aplicações em ligas metálicas e em dispositivos eletrônicos.",
+  "Túlio": "O Túlio é um metal de terras raras utilizado em lasers de alta potência e em algumas aplicações nucleares. Ele também tem aplicações limitadas devido à sua raridade e alto custo.",
+  "Itérbio": "O Itérbio é utilizado em lasers de fibra óptica e em materiais de alta resistência. Ele também tem aplicações em dispositivos de ressonância magnética e em reatores nucleares.",
+  "Lutécio": "O Lutécio é o elemento mais pesado das terras raras, utilizado em catalisadores e em equipamentos de imagem médica, como PET scans. Ele também é usado em alguns tipos de lasers.",
+  "Háfnio": "O Háfnio é utilizado em ligas resistentes ao calor e em reatores nucleares. Ele também é utilizado em dispositivos semicondutores e em materiais de alta resistência.",
+  "Tântalo": "O Tântalo é utilizado em capacitores eletrônicos e em próteses médicas devido à sua alta resistência à corrosão. Ele também é utilizado em ligas de alta resistência.",
+  "Tungstênio": "O Tungstênio é um metal com o ponto de fusão mais alto de todos os elementos, utilizado em filamentos de lâmpadas e em ferramentas de corte de alta resistência.",
+  "Rênio": "O Rênio é utilizado em superligas de alta resistência ao calor, principalmente em motores de aviões e em reatores nucleares. Ele também é utilizado em catalisadores para a indústria petroquímica.",
+  "Ósmio": "O Ósmio é um metal extremamente denso e resistente, utilizado em ligas metálicas para aumentar a dureza de outros metais. Ele também é utilizado em contatos elétricos e em dispositivos médicos.",
+  "Irídio": "O Irídio é um metal raro e resistente à corrosão, utilizado em ligas para aumentar a resistência de outros metais. Ele também é utilizado em catalisadores e em dispositivos eletrônicos.",
+  "Platina": "A Platina é um metal precioso utilizado em joalheria, catalisadores automotivos e na indústria química. Ela também é amplamente usada em dispositivos eletrônicos e em implantes médicos.",
+  "Ouro": "O Ouro é um metal precioso amplamente utilizado em joalheria, moedas e eletrônicos devido à sua excelente condutividade e resistência à corrosão. Ele também é utilizado em dispositivos médicos.",
+  "Mercúrio": "O Mercúrio é um metal líquido à temperatura ambiente, utilizado em termômetros, barômetros e em lâmpadas fluorescentes. Seu uso está sendo gradualmente eliminado devido à sua toxicidade.",
+  "Tálio": "O Tálio é um metal tóxico utilizado em dispositivos eletrônicos e em alguns tipos de vidros especiais. Seu uso é restrito devido à sua toxicidade.",
+  "Chumbo": "O Chumbo é um metal pesado utilizado em baterias, proteção contra radiação e em alguns tipos de soldas. Seu uso foi reduzido devido à sua toxicidade.",
+  "Bismuto": "O Bismuto é um metal pesado utilizado em ligas metálicas e em alguns medicamentos, como o subsalicilato de bismuto. Ele também é utilizado em soldas e em pigmentos.",
+  "Polônio": "O Polônio é um metal radioativo utilizado em dispositivos antiestáticos e em algumas aplicações nucleares. Ele é altamente tóxico e radioativo.",
+  "Astato": "O Astato é um halogênio radioativo extremamente raro, com poucas aplicações devido à sua alta instabilidade e radioatividade.",
+  "Radônio": "O Radônio é um gás nobre radioativo que ocorre naturalmente como produto de decaimento do rádio. Ele é utilizado em algumas terapias médicas, mas é perigoso devido à sua radioatividade.",
+  "Frâncio": "O Frâncio é um metal alcalino radioativo extremamente raro, com poucas aplicações devido à sua curta meia-vida e alta radioatividade.",
+  "Rádio": "O Rádio é um metal alcalino-terroso radioativo, utilizado historicamente em radioterapia, mas seu uso foi reduzido devido aos riscos à saúde.",
+  "Actínio": "O Actínio é um metal radioativo utilizado em algumas pesquisas científicas e em terapias de combate ao câncer. Ele também tem aplicações limitadas devido à sua alta radioatividade.",
+  "Tório": "O Tório é um metal radioativo utilizado como combustível em alguns tipos de reatores nucleares. Ele também é utilizado em ligas metálicas e em dispositivos de iluminação.",
+  "Protactínio": "O Protactínio é um metal radioativo com poucas aplicações devido à sua alta radioatividade e raridade. Ele é utilizado principalmente em pesquisas científicas.",
+  "Urânio": "O Urânio é um metal pesado radioativo utilizado como combustível em reatores nucleares e em armas nucleares. Ele também tem aplicações em alguns tipos de vidros e cerâmicas.",
+  "Neptúnio": "O Neptúnio é um metal radioativo com poucas aplicações comerciais. Ele é utilizado principalmente em pesquisas científicas e em reatores nucleares.",
+  "Plutônio": "O Plutônio é um metal radioativo utilizado como combustível em reatores nucleares e em armas nucleares. Ele também é utilizado em dispositivos de geração de energia para espaçonaves.",
+  "Amerício": "O Amerício é um metal radioativo utilizado em detectores de fumaça e em algumas pesquisas científicas. Ele também é utilizado em fontes de radiação para medições industriais.",
+  "Cúrio": "O Cúrio é um metal radioativo utilizado principalmente em pesquisas científicas e em geradores termoelétricos para espaçonaves.",
+  "Berquélio": "O Berquélio é um metal radioativo com aplicações limitadas devido à sua raridade e alta radioatividade. Ele é utilizado principalmente em pesquisas científicas.",
+  "Califórnio": "O Califórnio é um metal radioativo utilizado em pesquisas científicas, especialmente em fontes de nêutrons para estudos de materiais e em tratamentos de câncer.",
+  "Einstênio": "O Einstênio é um metal radioativo extremamente raro, com poucas aplicações comerciais. Ele é utilizado principalmente em pesquisas científicas.",
+  "Férmio": "O Férmio é um metal radioativo com poucas aplicações devido à sua raridade e alta radioatividade. Ele é utilizado principalmente em pesquisas científicas.",
+  "Mendelévio": "O Mendelévio é um metal radioativo utilizado em pesquisas científicas para estudar as propriedades de elementos transurânicos.",
+  "Nobélio": "O Nobélio é um metal radioativo utilizado principalmente em pesquisas científicas sobre a estrutura atômica de elementos pesados.",
+  "Laurêncio": "O Laurêncio é um metal radioativo utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Rutherfordio": "O Rutherfordio é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Dúbnio": "O Dúbnio é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Seabórgio": "O Seabórgio é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Bóhrio": "O Bóhrio é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Hássio": "O Hássio é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Meitnério": "O Meitnério é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Darmstádio": "O Darmstádio é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Roentgênio": "O Roentgênio é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Copernício": "O Copernício é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Nihônio": "O Nihônio é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Fleróvio": "O Fleróvio é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Moscóvio": "O Moscóvio é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Livermório": "O Livermório é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Tenessino": "O Tenessino é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados.",
+  "Oganessônio": "O Oganessônio é um elemento sintético utilizado em pesquisas científicas para estudar as propriedades de elementos superpesados."
+};
+
+
+
+// Seleciona o modal e o botão de fechar
+const modal = document.getElementById("elementModal");
+const span = document.getElementsByClassName("close")[0];
+
+// Adiciona evento de clique para cada elemento
+document.querySelectorAll('.element').forEach(el => {
+  el.addEventListener('click', function() {
+    const elementName = this.querySelector('.element-name').textContent;
+    const atomicNumber = this.querySelector('.atomic-number').textContent;
+    const atomicWeight = this.querySelector('.atomic-weight').textContent;
+
+    // Preenche os dados no modal
+    document.getElementById('element-name').textContent = elementName;
+    document.getElementById('atomic-number').textContent = atomicNumber;
+    document.getElementById('atomic-weight').textContent = atomicWeight;
+
+    // Adiciona a descrição do elemento
+    const description = elementDescriptions[elementName] || "Descrição não disponível.";
+    document.getElementById('element-description').textContent = description;
+    
+    // Exibe o modal
+    modal.style.display = "block";
+  });
+});
+
+// Fecha o modal quando o usuário clica no "X"
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// Fecha o modal se o usuário clicar fora dele
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+
+
+
+
+
+        </script>
+
+</body>
+
+</html>
