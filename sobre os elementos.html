@@ -38,7 +38,12 @@
         }
         h1 {
             text-align: center;
-            color: #333;
+            color: var(--titulo-claro, #333); 
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode h1 {
+            color: var(--titulo-escuro, #fff); 
         }
         h2{
             font-size: 24px;
